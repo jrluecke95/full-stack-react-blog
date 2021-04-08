@@ -72,5 +72,14 @@ router.post('/login', async (req, res) => {
   //respond with success
   return res.json(user)
 })
+// logging user out
+// localhost:3000/api/v1/users/logout
+router.get('/logout', (req, res) => {
+  // clears session out 
+  req.session.user = null;
+  res.json({
+    success: 'logged out'
+  })
+})
 
 module.exports = router;

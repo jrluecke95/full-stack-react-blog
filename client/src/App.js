@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import "./App.css";
 import Login from "./pages/Login";
@@ -15,8 +15,9 @@ function App() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <NavLink to='/'>Home</NavLink>
-              <NavLink to="/register">Register</NavLink>
+              <Nav.Link><Link to='/'>Home</Link></Nav.Link>
+              <Nav.Link><Link to='/register'>Register</Link></Nav.Link>
+              <Nav.Link><Link to='/login'>Login</Link></Nav.Link>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item to="/">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">

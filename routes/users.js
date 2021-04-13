@@ -70,7 +70,11 @@ router.post('/login', async (req, res) => {
   //store user info in session/log in 
   req.session.user = user
   //respond with success
-  return res.json(user)
+  return res.json({
+    id: user.id,
+    username: user.username,
+    updatedAt: user.updatedAt
+  })
 })
 // logging user out
 // localhost:3000/api/v1/users/logout
@@ -80,6 +84,21 @@ router.get('/logout', (req, res) => {
   res.json({
     success: 'logged out'
   })
+})
+// checking to see if user is logged in and sending back appropriate data
+router.get('/current', (req, res) => {
+  const { user } = req.session;
+  if (user) {
+    res.json({
+      id: user.id,
+      username: user.username,
+      updatedAt: user.updatedAt,
+    })
+  } else {
+    res.status(401).json({
+      error: 'not logged in'
+    })
+  }
 })
 
 module.exports = router;

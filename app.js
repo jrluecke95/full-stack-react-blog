@@ -8,6 +8,7 @@ const models = require('./models')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const postsRouter = require('./routes/posts');
 const db = require('./models');
 
 var app = express();
@@ -31,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/posts', postsRouter);
 
 // send all other requests to react index.html
 app.get('*', (req, res) => {

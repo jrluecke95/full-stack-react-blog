@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from 'react-bootstrap';
 import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/actions'
 
 const Login = () => {
   const [ form, setForm ] = useState({
     username: '',
     password: ''
   })
-
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ const Login = () => {
         alert(data.error)
       } else {
         alert('user logged in!');
+        dispatch(setUser(data))
         history.push('/')
       }
     })
@@ -58,7 +61,7 @@ const Login = () => {
             <Form.Check type="checkbox" label="Check me out" />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            Login
           </Button>
         </Form>
       </Container>

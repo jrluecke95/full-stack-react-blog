@@ -1,23 +1,63 @@
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import { Route, Switch, Link, useHistory } from "react-router-dom";
 import Home from "./pages/Home";
 import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "./redux/actions";
+import { useEffect } from "react";
+import Blog from "./pages/Blog";
 
 function App() {
+  const user = useSelector((state) => state.user);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const logout = () => {
+    fetch('/api/v1/users/logout')
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.success);
+        dispatch(setUser(null));
+        history.push('/login')
+      }
+    })
+  }
+// checking to see if user logged in - if so, set up redux with user data so that page refreshes dont reset login status
+  useEffect(() => {
+    fetch('/api/v1/users/current')
+    .then(res => res.json())
+    .then(data => {
+      if (!data.error) {
+        dispatch(setUser(data))
+      }
+    })
+  }, [])
+
   return (
     <div className="App">
-      <Router>
         <Navbar bg="light" expand="lg">
           <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
               <Nav.Link><Link to='/'>Home</Link></Nav.Link>
-              <Nav.Link><Link to='/register'>Register</Link></Nav.Link>
-              <Nav.Link><Link to='/login'>Login</Link></Nav.Link>
+              
+              {user ? (
+                <>
+                  {user.username}
+                  <Button onClick={logout} variant="primary">Logout</Button>
+                </>
+              ) : (
+                <>
+                  <Nav.Link><Link to='/register'>Register</Link></Nav.Link>
+                  <Nav.Link><Link to='/login'>Login</Link></Nav.Link>
+                </>
+                )
+              }
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item to="/">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
@@ -52,8 +92,10 @@ function App() {
           <Route path="/register">
             <Register />
           </Route>
+          <Route path='/blog'>
+            <Blog />
+          </Route>
         </Switch>
-      </Router>
     </div>
   );
 }

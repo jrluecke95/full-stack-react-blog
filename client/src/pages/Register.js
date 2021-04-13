@@ -58,7 +58,7 @@ const Register = () => {
             <Form.Check type="checkbox" label="Check me out" />
           </Form.Group>
           <Button variant="primary" type="submit">
-            Submit
+            Register
           </Button>
         </Form>
       </Container>

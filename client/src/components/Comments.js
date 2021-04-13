@@ -42,6 +42,7 @@ const Comments = (props) => {
         alert(data.error)
       } else {
         alert('comment submitted');
+        setText('')
         getComments();
       }
     })

@@ -7,13 +7,15 @@ import { Navbar, Nav, NavDropdown, Form, FormControl, Button } from 'react-boots
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./redux/actions";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Blog from "./pages/Blog";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const user = useSelector((state) => state.user);
   const history = useHistory();
   const dispatch = useDispatch();
+  const [ userStatus, setUserStatus ] = useState('LOADING');
 
   const logout = () => {
     fetch('/api/v1/users/logout')
@@ -34,6 +36,7 @@ function App() {
       if (!data.error) {
         dispatch(setUser(data))
       }
+      setUserStatus('CHECKED')
     })
   }, [])
 
@@ -82,6 +85,8 @@ function App() {
             </Form>
           </Navbar.Collapse>
         </Navbar>
+        {userStatus === 'LOADING' && 'Loading...'}
+        {userStatus === 'CHECKED' && (
         <Switch>
           <Route path="/" exact>
             <Home />
@@ -92,10 +97,11 @@ function App() {
           <Route path="/register">
             <Register />
           </Route>
-          <Route path='/blog'>
+          <ProtectedRoute path='/blog'>
             <Blog />
-          </Route>
+          </ProtectedRoute>
         </Switch>
+        )}
     </div>
   );
 }
